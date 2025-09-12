@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    environment {
+        AWS_ACCESS_KEY_ID     = 'AKIAW2766TYSU2ESFN67'
+        AWS_SECRET_ACCESS_KEY = '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'
+        AWS_DEFAULT_REGION    = 'eu-north-1'
+    }
+
     stages {
         stage('Git Chekout') {
             steps {
