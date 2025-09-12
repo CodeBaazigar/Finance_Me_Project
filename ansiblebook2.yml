@@ -1,0 +1,55 @@
+- name: Add dynamic servers from Terraform
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Get Terraform outputs
+      command: terraform output -json
+      register: tf_out
+
+    - name: Add Test server
+      add_host:
+        name: "{{ tf_out.stdout_json.test_server.value.public_ip }}"
+        groups: dynamic_servers
+        ansible_user: ubuntu
+        ansible_ssh_private_key_file: ~/.ssh/key123.pem
+
+    - name: Add Prod server
+      add_host:
+        name: "{{ tf_out.stdout_json.Prod_server.value.public_ip }}"
+        groups: dynamic_servers
+        ansible_user: ubuntu
+        ansible_ssh_private_key_file: ~/.ssh/key123.pem
+
+- name: Deploy FinanceMe app on dynamic servers
+  hosts: dynamic_servers
+  become: yes
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull app Docker image
+      docker_image:
+        name: codebaazigar/FinanceMe
+        source: pull
+
+    - name: Run app container
+      docker_container:
+        name: FinanceMe
+        image: codebaazigar/FinanceMe
+        state: started
+        restart_policy: always
+        ports:
+          - "8081:8081"
+
