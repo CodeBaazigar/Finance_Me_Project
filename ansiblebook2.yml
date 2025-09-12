@@ -41,13 +41,13 @@
 
     - name: Pull app Docker image
       docker_image:
-        name: codebaazigar/FinanceMe
+        name: codebaazigar/financeMe
         source: pull
 
     - name: Run app container
       docker_container:
         name: FinanceMe
-        image: codebaazigar/FinanceMe
+        image: codebaazigar/financeMe
         state: started
         restart_policy: always
         ports:
