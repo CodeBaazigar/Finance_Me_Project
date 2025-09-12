@@ -14,13 +14,13 @@ pipeline {
         }
         stage('Docker Build Image ') {
             steps {
-                sh 'docker build -t codebaazigar/FinanceMe .'
+                sh 'docker build -t codebaazigar/financeMe .'
             }
         }
         stage('Pushing to Dockerhub ') {
             steps {
                 withDockerRegistry(credentialsId: 'Dockerhub_CRED', url: 'https://index.docker.io/v1/') {
-                    sh 'docker push codebaazigar/FinanceMe'
+                    sh 'docker push codebaazigar/financeMe'
                 }
             }
         }
