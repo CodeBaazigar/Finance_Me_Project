@@ -26,11 +26,16 @@ pipeline {
         }
         stage(' Terraform Apply ') {
             steps {
-		withCredentials([usernameColonPassword(credentialsId: 'AWS_Credentials', variable: 'Aws_Key')]) {
+				withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'AWS_Credentials',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
                     tool name: 'Terraform', type: 'terraform'
                     sh 'terraform init'
                     sh 'terraform apply -auto-approve'
-		}
+				}
             }
         }
         stage(' Ansible Configuration  ') {
