@@ -11,14 +11,14 @@
         name: "{{ (tf_out.stdout | from_json).test_server.value }}"
         groups: dynamic_servers
         ansible_user: ubuntu
-        ansible_ssh_private_key_file: ~/.ssh/key123.pem
+        ansible_ssh_private_key_file: ~/.ssh/key123
 
     - name: Add Prod server
       add_host:
         name: "{{ (tf_out.stdout | from_json).Prod_server.value }}"
         groups: dynamic_servers
         ansible_user: ubuntu
-        ansible_ssh_private_key_file: ~/.ssh/key123.pem
+        ansible_ssh_private_key_file: ~/.ssh/key123
 
 - name: Deploy FinanceMe app on dynamic servers
   hosts: dynamic_servers
