@@ -29,3 +29,11 @@ resource "aws_instance" "Prod_server" {
     Name = "Prod_server"
   }
 }
+output "test_server" {
+  value = aws_instance.test_server.public_ip
+}
+
+output "prod_server" {
+  value = aws_instance.Prod_server.public_ip
+}
+
