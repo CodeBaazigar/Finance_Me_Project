@@ -1,7 +1,6 @@
 pipeline {
     agent any
 
-
     stages {
         stage('Git Chekout') {
             steps {
@@ -27,9 +26,11 @@ pipeline {
         }
         stage(' Terraform Apply ') {
             steps {
-                tool name: 'Terraform', type: 'terraform'
-                sh 'terraform init'
-                sh 'terraform apply -auto-approve'
+		withCredentials([usernameColonPassword(credentialsId: 'AWS_Credentials', variable: 'Aws_Key')]) {
+                    tool name: 'Terraform', type: 'terraform'
+                    sh 'terraform init'
+                    sh 'terraform apply -auto-approve'
+		}
             }
         }
         stage(' Ansible Configuration  ') {
@@ -39,4 +40,5 @@ pipeline {
         }
     }
 }
+
 
